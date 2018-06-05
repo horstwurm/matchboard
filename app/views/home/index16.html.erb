@@ -76,7 +76,7 @@ $(document).ready(function(){
         
     function callme() {
         $.ajax({
-            url: "https://mytgcloud.herokuapp.com/home/Umfragen_data.json?question_id=<%= @question.id %>",
+            url: "https://mymatch.herokuapp.com/home/Umfragen_data.json?question_id=<%= @question.id %>",
             //url: "https://ostch-horstwurm.c9users.io/home/Umfragen_data.json?question_id=<%= @question.id %>",
             //force to handle it as text
             dataType: "text",

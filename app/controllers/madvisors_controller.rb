@@ -25,7 +25,7 @@ class MadvisorsController < ApplicationController
       end
       @madvisor.save
 
-      UserMailer.user_access_info(User.find(@madvisor.user_id), "TGCloud Information", "Berechtigung erteilt! - Standardberechtigung", @madvisor.mobject).deliver_now
+      UserMailer.user_access_info(User.find(@madvisor.user_id), "mymtach Information", "Berechtigung erteilt! - Standardberechtigung", @madvisor.mobject).deliver_now
 
     end
     if params[:madvisor_id]
@@ -51,7 +51,7 @@ class MadvisorsController < ApplicationController
       end
       @madvisor.save
       
-      UserMailer.user_access_info(User.find(@madvisor.user_id), "TGCloud Information", "Berechtigung erteilt! - " + @madvisor.grade, @madvisor.mobject).deliver_now
+      UserMailer.user_access_info(User.find(@madvisor.user_id), "mymatch Information", "Berechtigung erteilt! - " + @madvisor.grade, @madvisor.mobject).deliver_now
 
     end
     if params[:senior_madvisor_id]
@@ -77,7 +77,7 @@ class MadvisorsController < ApplicationController
       end
       @madvisor.save
 
-      UserMailer.user_access_info(User.find(@madvisor.user_id), "TGCloud Information", "Berechtigung erteilt! - " + @madvisor.grade, @madvisor.mobject).deliver_now
+      UserMailer.user_access_info(User.find(@madvisor.user_id), "mymatch Information", "Berechtigung erteilt! - " + @madvisor.grade, @madvisor.mobject).deliver_now
 
     end
     if params[:delete_madvisor_id]
@@ -85,7 +85,7 @@ class MadvisorsController < ApplicationController
       if @madvisor
         @madvisor.destroy
 
-        UserMailer.user_access_info(User.find(@madvisor.user_id), "TGCloud Information", "Berechtigung gelöscht! - " + @madvisor.grade, @madvisor.mobject).deliver_now
+        UserMailer.user_access_info(User.find(@madvisor.user_id), "mymatch Information", "Berechtigung gelöscht! - " + @madvisor.grade, @madvisor.mobject).deliver_now
 
       end
     end

@@ -20,6 +20,10 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 de:
+  plaetze: "Plätze"
+  logo: "Logo"
+  sportstaetten: "Sportstätten"
+  spiele: "Spiele"
   rangliste: "Rangliste"
   antrag: "Sponsoring Antrag"
   sponsorkriterien: "Sponsoring Bewertungskriterien"
@@ -55,8 +59,8 @@ de:
   exportieren: "exportieren"
   unlimited: "unbeschränkt"
   suchen: "suchen"
-  institutionenuebersicht: "Institutionen suchen"
-  personenuebersicht: "Personen suchen"
+  institutionenuebersicht: "Ubersicht Sportstaetten"
+  personenuebersicht: "Spieleruebersicht"
   datenaendern: "Daten ändern"
   datenloeschen: "Daten löschen"
   fraud: "Missbrauch"
@@ -96,8 +100,8 @@ de:
   service: "TGCloudService"
   charges: "Zahlungen"
   news: "News"
-  personen: "Personen"
-  institutionen: "Institutionen"
+  personen: "Spieler"
+  institutionen: "Sportstaetten"
   umfragen: "Umfragen"
   projekte: "Projekte"
   innovationswettbewerbe: "Wettbewerbe"

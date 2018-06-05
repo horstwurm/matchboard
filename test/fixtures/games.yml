@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  mobject_id: 1
+  user_id: 1
+  modus: MyString
+  mkategory_id: 1
+  player1: MyString
+  player2: MyString
+  player3: MyString
+  player4: MyString
+
+two:
+  mobject_id: 1
+  user_id: 1
+  modus: MyString
+  mkategory_id: 1
+  player1: MyString
+  player2: MyString
+  player3: MyString
+  player4: MyString

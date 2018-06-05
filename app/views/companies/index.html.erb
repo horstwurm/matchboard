@@ -1,6 +1,6 @@
   <div class="row">
     <% if user_signed_in? %>
-        <%= header("<button type='button' class='btn btn-default fa fa-filter' data-toggle='collapse' data-target='#demo'></button> Institutionen <span class='badge'>" + @companz.to_s + "</span>") %>
+        <%= header("<button type='button' class='btn btn-default fa fa-filter' data-toggle='collapse' data-target='#demo'></button>" + (I18n.t :institutionen) +"<span class='badge'>" + @companz.to_s + "</span>") %>
     <% else %>
         <%= header(I18n.t(:institutionen).downcase + " <span class='badge'>" + @companz.to_s + "</span>") %>
     <% end %>

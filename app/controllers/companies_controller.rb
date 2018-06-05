@@ -29,148 +29,21 @@ class CompaniesController < ApplicationController
   # GET /companies/1
   def show
 
-   if params[:scope]
-     @c_scope = params[:scope]
-   else
-     @c_scope = "beantragt"
-   end 
-
-   if !@menu
-     @menu="f"
-   end
-   if params[:menu]
-     if params[:menu] == "f"
-       @menu = "t"
-     else
-       @menu = "f"
-     end
-   end
-    
      if params[:topic]
        @topic = params[:topic]
      else 
        @topic = "institutionen_info"
      end 
     
-    if params[:camp_id]
-      @campaign = SignageCamp.find(params[:camp_id])
-    end
-
     @mtypes = Mobject.select("mtype").distinct
     @stats = [["Aktivtäten","Anzahl"]]
     @stats << ["Partnerlinks", @company.partner_links.count ]
-    @stats << ["Kundenverbindungen", @company.customers.count ]
-    @stats << ["ZV Transaktionen", @company.transactions.where('ttype=?', "payment").count]
     @mtypes.each do |t|
       @text = t.mtype
       @anz = @company.mobjects.where('mtype=?',t.mtype).count
       if @anz and @anz > 0
         @stats << [@text, @anz]
       end
-    end
-
-    if @topic == "institutionen_sponsorantraege"
-
-      @sponsorstats1 = [["Status","Anzahl"]]
-      @antraege = @company.mobjects.select("sponsorenstatus as status, count(*) as anzahl").where('mtype=?',"sponsorantraege").group(:sponsorenstatus)
-      @antraege.each do |t|
-        if t.anzahl and t.status and t.anzahl > 0
-          @sponsorstats1 << [t.status, t.anzahl]
-        end
-      end
-
-      @sponsorstats2 = [["Status","CHF"]]
-      @antraege = @company.mobjects.select("sponsorenstatus as status, sum(sponsorenbetragantrag) as anzahl").where('mtype=?',"sponsorantraege").group(:sponsorenstatus)
-      @antraege.each do |t|
-        if t.anzahl and t.status and t.anzahl > 0
-          @sponsorstats2 << [t.status, t.anzahl]
-        end
-      end
-      
-      if !$sqllite
-      @sponsorstats3 = [["Monat","Anzahl"]]
-      #@antraege = @company.mobjects.select("strftime('%m', created_at) as monat, count(*) as anzahl").where('mtype=?',"sponsorantraege").group('monat')
-      @antraege = @company.mobjects.select("extract(month from created_at) as monat, count(*) as anzahl").where('mtype=?',"sponsorantraege").group('monat')
-      @antraege.each do |t|
-        if t.anzahl and t.monat and t.anzahl > 0
-          @sponsorstats3 << [t.monat, t.anzahl]
-        end
-      end
-
-      @sponsorstats4 = [["Monat","Betrag beantragt","Betrag genehmigt"]]
-      #@antraege = @company.mobjects.select("strftime('%m', created_at) as monat, sum(sponsorenbetragantrag) as sumantrag, sum(sponsorenbetraggenehmigt) as sumok").where('mtype=?',"sponsorantraege").group('monat')
-      @antraege = @company.mobjects.select("extract(month from created_at) as monat, sum(sponsorenbetragantrag) as sumantrag, sum(sponsorenbetraggenehmigt) as sumok").where('mtype=?',"sponsorantraege").group('monat')
-      @antraege.each do |t|
-        #if t.sumantrag and t.monat and t.sumantrag > 0 and t.sumok and t.sumok>0
-          @sponsorstats4 << [t.monat, t.sumantrag, t.sumok]
-        #end
-      end
-      end
-      
-    end
-
-    if @topic ==   "institutionen_export"
-
-        if params[:writeexcel]
-          @filename = "public/projectreport_company"+@company.id.to_s+".xls"
-        else
-          @filename = nil
-        end
-
-        if params[:year]
-          @c_year = params[:year]
-        else
-          @c_year = Date.today.year
-        end
-        if params[:month]
-          @c_month = params[:month]
-        else
-          @c_month = Date.today.month
-        end
-
-        if params[:mode]
-          @c_mode = params[:mode]
-        else
-          if @topic == "institutionen_export"
-            @c_mode = "Monat"
-          end
-        end
-
-        if params[:dir] == ">"
-          if @c_mode == "Monat"
-            if @c_month.to_i == 12
-              @c_month =  1
-              @c_year = @c_year.to_i + 1
-            else
-              @c_month = @c_month.to_i + 1
-            end
-          end
-          if @c_mode == "Jahr"
-            @c_year = @c_year.to_i + 1
-          end
-        end
-        if params[:dir] == "<"
-          if @c_mode == "Monat"
-            if @c_month.to_i == 1
-              @c_month =  12
-              @c_year = @c_year.to_i - 1
-            else
-              @c_month = @c_month.to_i - 1
-            end
-          end
-          if @c_mode == "Jahr"
-            @c_year = @c_year.to_i - 1
-          end
-        end
-        case @c_mode
-          when "Monat"
-            @date_start = Date.new(@c_year.to_i,@c_month.to_i,1)
-            @date_end = @date_start.end_of_month
-          when "Jahr"
-            @date_start = Date.new(@c_year.to_i,1,1)
-            @date_end = Date.new(@c_year.to_i,12,31)
-        end
-        
     end
 
   end
@@ -180,7 +53,6 @@ class CompaniesController < ApplicationController
       @company = Company.new
       @company.user_id = params[:user_id]
       @company.active = true
-      @company.social = false
       @company.status = "OK"
       @company.partner = false
   end
@@ -224,7 +96,7 @@ class CompaniesController < ApplicationController
     end
     
     def company_params
-      params.require(:company).permit(:partner, :status, :active, :name, :homepage, :mcategory_id, :social, :stichworte, :user_id, :description, :address1, :address2, :address3, :geo_address, :longitude, :latitude, :phone1, :phone2, :avatar, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at)
+      params.require(:company).permit(:partner, :status, :active, :name, :homepage, :mcategory_id, :stichworte, :user_id, :description, :address1, :address2, :address3, :geo_address, :longitude, :latitude, :phone1, :phone2, :avatar, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at)
     end
 
 end

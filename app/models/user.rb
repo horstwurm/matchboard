@@ -8,35 +8,16 @@ devise :database_authenticatable, :registerable,
         # UserMailer.welcome_email(User.last).deliver_now
   end
 
-    has_many :sponsor_ratings, dependent: :destroy
-    has_many :iots, as: :owner, dependent: :destroy 
     has_many :deputies, as: :owner, dependent: :destroy 
     has_many :charges, as: :owner, dependent: :destroy 
     has_many :mobjects, as: :owner, dependent: :destroy 
-    has_many :mstats, as: :owner, dependent: :destroy 
-    has_many :customers, as: :owner, dependent: :destroy 
-    has_many :transactions, as: :owner, dependent: :destroy 
-
     has_many :credentials, dependent: :destroy 
     has_many :webmasters, dependent: :destroy 
     has_many :companies, dependent: :destroy 
-    has_many :mratings, dependent: :destroy 
-    has_many :mcalendars, dependent: :destroy 
-    #has_many :msponsors, dependent: :destroy 
     has_many :madvisors, dependent: :destroy
     has_many :favourits, dependent: :destroy 
     has_many :searches, dependent: :destroy
-    has_many :user_tickets, dependent: :destroy 
-    has_many :madvisors, dependent: :destroy 
-    has_many :user_positions, dependent: :destroy 
-    has_many :mlikes, dependent: :destroy   
-    has_many :user_answers, dependent: :destroy   
-    has_many :timetracks, dependent: :destroy 
-    has_many :plannings, dependent: :destroy 
-    has_many :ideas, dependent: :destroy 
-    has_many :idea_ratings, dependent: :destroy 
-    has_many :idea_crowdratings, dependent: :destroy 
-    has_many :notes
+    has_many :games, dependent: :destroy
 
     # validates :userid, presence: true, :uniqueness => true
     validates :lastname, presence: true    

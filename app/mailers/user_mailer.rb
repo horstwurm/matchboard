@@ -1,5 +1,5 @@
 class UserMailer < ApplicationMailer
-  default from: 'postmaster@mg.mytgcloud.com'
+  default from: 'postmaster@mg.mymatch.com'
 
   add_template_helper(EmailHelper)
  

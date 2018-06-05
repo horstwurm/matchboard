@@ -1,0 +1,97 @@
+<%= form_for(result) do |f| %>
+  <% if result.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(result.errors.count, "error") %> prohibited this result from being saved:</h2>
+
+      <ul>
+      <% result.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :game_id %>
+    <%= f.number_field :game_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :set1H %>
+    <%= f.number_field :set1H %>
+  </div>
+
+  <div class="field">
+    <%= f.label :set2H %>
+    <%= f.number_field :set2H %>
+  </div>
+
+  <div class="field">
+    <%= f.label :set3H %>
+    <%= f.number_field :set3H %>
+  </div>
+
+  <div class="field">
+    <%= f.label :set4H %>
+    <%= f.number_field :set4H %>
+  </div>
+
+  <div class="field">
+    <%= f.label :set5H %>
+    <%= f.number_field :set5H %>
+  </div>
+
+  <div class="field">
+    <%= f.label :set1G %>
+    <%= f.number_field :set1G %>
+  </div>
+
+  <div class="field">
+    <%= f.label :set2G %>
+    <%= f.number_field :set2G %>
+  </div>
+
+  <div class="field">
+    <%= f.label :set3G %>
+    <%= f.number_field :set3G %>
+  </div>
+
+  <div class="field">
+    <%= f.label :set4G %>
+    <%= f.number_field :set4G %>
+  </div>
+
+  <div class="field">
+    <%= f.label :set5G %>
+    <%= f.number_field :set5G %>
+  </div>
+
+  <div class="field">
+    <%= f.label :gameH %>
+    <%= f.text_field :gameH %>
+  </div>
+
+  <div class="field">
+    <%= f.label :gameG %>
+    <%= f.text_field :gameG %>
+  </div>
+
+  <div class="field">
+    <%= f.label :breakball %>
+    <%= f.text_field :breakball %>
+  </div>
+
+  <div class="field">
+    <%= f.label :setball %>
+    <%= f.text_field :setball %>
+  </div>
+
+  <div class="field">
+    <%= f.label :matchball %>
+    <%= f.text_field :matchball %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

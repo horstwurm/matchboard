@@ -31,13 +31,7 @@
       </div>
     </div>
   </div>
-  
-  <% if @edition_id %>
-    <%= build_medialistNew(@mobjects, "mobjects", @edition_id) %>
-  <% else %>
-    <%= build_medialistNew(@mobjects, "mobjects", "panel") %>
-  <% end %>
-  
+
   <div class="panel-body">
     <div class="row">
       <i class="fa fa-map-marker pull-left" onclick="return initMap();"></i>

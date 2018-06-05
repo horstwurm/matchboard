@@ -1,0 +1,57 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Results</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Game</th>
+      <th>Set1h</th>
+      <th>Set2h</th>
+      <th>Set3h</th>
+      <th>Set4h</th>
+      <th>Set5h</th>
+      <th>Set1g</th>
+      <th>Set2g</th>
+      <th>Set3g</th>
+      <th>Set4g</th>
+      <th>Set5g</th>
+      <th>Gameh</th>
+      <th>Gameg</th>
+      <th>Breakball</th>
+      <th>Setball</th>
+      <th>Matchball</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @results.each do |result| %>
+      <tr>
+        <td><%= result.game_id %></td>
+        <td><%= result.set1H %></td>
+        <td><%= result.set2H %></td>
+        <td><%= result.set3H %></td>
+        <td><%= result.set4H %></td>
+        <td><%= result.set5H %></td>
+        <td><%= result.set1G %></td>
+        <td><%= result.set2G %></td>
+        <td><%= result.set3G %></td>
+        <td><%= result.set4G %></td>
+        <td><%= result.set5G %></td>
+        <td><%= result.gameH %></td>
+        <td><%= result.gameG %></td>
+        <td><%= result.breakball %></td>
+        <td><%= result.setball %></td>
+        <td><%= result.matchball %></td>
+        <td><%= link_to 'Show', result %></td>
+        <td><%= link_to 'Edit', edit_result_path(result) %></td>
+        <td><%= link_to 'Destroy', result, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Result', new_result_path %>

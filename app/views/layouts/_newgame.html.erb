@@ -1,0 +1,57 @@
+  <section id="newgame" class="section-padding wow fadeIn delay-05s">
+    <div class="header">
+      <div class="bg-color">
+        <div class="wrapper">
+          <div class="container">
+            <div class="row">
+              <div class="banner-info text-center wow fadeIn delay-05s">
+               <h2 class="bnr-sub-title">Neues Spiel</h2>
+                <div class="brn-btn">
+                  <div class="container">
+                  		<div class="row">
+                				<div class="col-md-12">
+                				  
+                          <%= link_to new_game_path do %>
+              				    	<i class="btn btn-download fa fa-map-marker"></i>
+              					  <% end %>
+                          Standort/Platz
+                          <%= link_to new_game_path do %>
+              				    	<i class="btn btn-download fa fa-user"></i>
+              					  <% end %>
+                          Einzel
+                          <%= link_to new_game_path do %>
+              				    	<i class="btn btn-download fa fa-folder"></i>
+              					  <% end %>
+                          TieBreak
+                          <table style="width:100%">
+                            <tr>
+                              <th style="text-align:center"><h3>Heim</h3></th>
+                              <th style="text-align:center"><h3>Gast</h3></th> 
+                            </tr>
+                            <tr>
+                              <td>
+                    					  <%= link_to new_game_path do %>
+                    				    	<i class="btn btn-download fa fa-search"></i>
+                    					  <% end %>
+                                Smith
+                              </td>
+                              <td>
+                                Peter
+                    					  <%= link_to new_game_path do %>
+                    				    	<i class="btn btn-download fa fa-search"></i>
+                    					  <% end %>
+                              </td>
+                            </tr>
+                          </table>
+
+                				</div>
+              				</div>
+              			</div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :results
+  resources :games
   resources :sponsor_ratings
   resources :company_params
   resources :publication_articles
@@ -87,6 +89,9 @@ Rails.application.routes.draw do
   get 'home/alexa'
   get 'home/writeimage'
   get 'home/temptest'
+  get 'home/playersearch'
+  get 'home/tenniscounter'
+  get 'home/getResult'
 
   resources :searches
   resources :partner_links
@@ -122,6 +127,4 @@ Rails.application.routes.draw do
   resources :users
   resources :tests
   
-  # mount ActionCable.server => '/cable'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

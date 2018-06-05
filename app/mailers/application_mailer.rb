@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'mg.mytgcloud.com'
+  default from: 'mg.mymatch.com'
   layout 'mailer'
 
 end

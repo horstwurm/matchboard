@@ -9,12 +9,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-                <a class="navbar-brand" href="#">TG<span class="logo-dec">Cloud</span></a>
+                <a class="navbar-brand" href="#">my<span class="logo-dec">Match</span></a>
               </div>
               <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
 
-      				<% if $controller_list.include?(controller_name) and (action_name == "index") %>
+      				<% if $controller_list.include?(controller_name) and (action_name == "index") or action_name == "playersearch" %>
       					<% @items = url_for(action: action_name, controller: controller_name) %>
                 <li class="">
       					<%= form_tag @items, method: 'get' do %>
@@ -29,8 +29,8 @@
       				<% end %>
 
                   <li class="active"><a href="../#main-header">Home</a></li>
-                  <li class=""><a href="../#myservices">Services</a></li>
                   <% if false %>
+                  <li class=""><a href="../#myservices">Services</a></li>
                   <li class=""><a href="../#yield">Data</a></li>
                   <li class=""><a href="../#feature">About</a></li>
                   <li class=""><a href="../#service">Services</a></li>
@@ -39,11 +39,14 @@
                   <li class=""><a href="../#blog">Blog</a></li>
                   <li class=""><a href="../#contact">Kontakt</a></li>
                   <li class=""><a href="../#news">News</a></li>
-                  <% end %>
-                  <li class=""><a href="../#news">Veranstaltungen</a></li>
                   <li class=""><a href="../#subscription">Abonnement</a></li>
+                  <li class=""><a href="../#newgame">Neues Spiel</a></li>
+                  <% end %>
+                  <% if user_signed_in? %>
+                    <li class=""><a href="../#games">Spiele</a></li>
+                  <% end %>
+                  <li class=""><a href="../#dashboard">Statistik</a></li>
                   <li class=""><a href="../#partner">Partner</a></li>
-                  <li class=""><a href="../#dashboard">Cockpit</a></li>
                   <% if user_signed_in? and (current_user.superuser or current_user.webmaster) %>
                     <li class=""><a href="../#superuser">Admin</a></li>
                   <% end %>
@@ -56,7 +59,7 @@
           <div class="container">
             <div class="row">
               <div class="banner-info text-center wow fadeIn delay-05s">
-                <h1 class="bnr-title">Willkommen bei TG<span>cloud</span></h1>
+                <h1 class="bnr-title">Willkommen bei my<span>Match</span></h1>
                 <% if user_signed_in? %>
                   <%= contactChip(current_user) %>
                 <% end %>
@@ -68,7 +71,7 @@
                 <div class="row">
                   <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     
-                    <h2>TGCloud</h2>
+                    <h2>meine letzten Spiele</h2>
 
                     <div class="news blue">
                       <!--<span>News</span>-->
@@ -103,7 +106,7 @@
                     
                     <% if user_signed_in? %>
 
-                      <h2>myNews</h2>
+                      <h2>Spiele meiner Partner</h2>
   
                       <div class="news2 blue">
                         <!--<span>News2</span>-->
@@ -142,23 +145,6 @@
                               </li>
                           <% end %>
   
-                          <!--eMails-->
-                          <% f = Email.where('m_to=?', current_user.id).last(5) %>
-                          <% f.each do |m| %>
-                              <% u=User.find(m.m_from) %>
-                              <li>
-                                <div class="row">
-                                  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                                    <%= showImage2(:small, u, true) %>
-                                  </div>
-                                  <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                                    <b><%= m.created_at.strftime("%d.%m.%Y") %></b><br>
-                                    <%= m.header + " " + m.body %>
-                                  </div>
-                                </div>
-                              </li>
-                          <% end %>
-
                         </ul>
                       </div>
 
@@ -173,6 +159,10 @@
         					  <%= link_to(destroy_user_session_path, method: :delete) do %>
         				    	<i class="btn btn-more">Abmelden</i>
         					  <% end %>
+        					  <%= link_to(new_game_path) do %>
+        				    	<i class="btn btn-more">Neues Spiel</i>
+        					  <% end %>
+        					  
         					<% else %>
                    <h2 class="bnr-sub-title">Starten Sie jetzt !!</h2>
                     <p class="bnr-para">Registrieren Sie sich noch heute<br> </p>

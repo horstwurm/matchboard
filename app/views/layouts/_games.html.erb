@@ -1,0 +1,103 @@
+  <section id="games" class="section-padding wow fadeIn delay-05s">
+    <div class="header">
+      <div class="bg-color">
+        <div class="wrapper">
+          <div class="container">
+            <div class="row">
+              <div class="banner-info text-center wow fadeIn delay-05s">
+               <h2 class="bnr-sub-title">Spiele</h2>
+                <div class="brn-btn">
+
+              <div class="container">
+              		<div class="row">
+          				<div class="col-md-12">
+          				  <% if false %>
+          					<div class="page-header">
+          					  <h2>meine Spiele</h2>
+          					</div>
+          					<% end %>
+          					<div style="display:inline-block;width:100%;overflow-y:auto;">
+          					<ul class="timeline timeline-horizontal">
+          
+                      <% @g = current_user.games.order(created_at: :desc).last(25) %>
+                      <% @g.each do |g| %>
+                      
+            						<li class="timeline-item">
+            						  <% if false %>
+            							<div class="timeline-badge primary"><i class="glyphicon glyphicon-check"></i>tatatata</div>
+            						  <% end %>
+            							<div class="timeline-badge primary"><i class="fa fa-trophy"></i></div>
+            							<div class="timeline-panel" style="background-color:transparent">
+            								<div class="timeline-heading" style="text-align:left">
+            									<h4 class="timeline-title"><i class="fa fa-safari"></i> <%= g.created_at.strftime("%d.%m.%Y") %></h4>
+            								</div>
+            								<div class="timeline-body">
+            								  <table style="width:100%">
+            								    <tr>
+            								      <td style="text-align:center">
+                  									<% @u=User.where('email=?',g.player1).first %>
+                  									<% if @u %>
+                    									<%= showImage2(:small, @u,true) %>
+                    									<small class="text-muted"> <%= @u.name + " " + @u.lastname %></small>
+                  									<% end %>
+                                  </td>
+                                  <td></td>
+            								      <td style="text-align:center">
+                  									<% @u=User.where('email=?',g.player2).first %>
+                  									<% if @u %>
+                    									<%= showImage2(:small, @u,true) %>
+                    									<small class="text-muted"> <%= @u.name + " " + @u.lastname %></small>
+                  									<% end %>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td colspan="3" style="text-align:center">
+                                    <% res = "" %>
+                                    <% if g.results.last %>
+                                      <% if g.results.last.set1H and g.results.last.set1G %>
+                                        <% res = res + g.results.last.set1H.to_s + ":" + g.results.last.set1G.to_s + " " %>
+                                      <% end %>
+                                      <% if g.results.last.set2H and g.results.last.set2G %>
+                                        <% res = res + g.results.last.set2H.to_s + ":" + g.results.last.set2G.to_s + " " %>
+                                      <% end %>
+                                      <% if g.results.last.set3H and g.results.last.set3G %>
+                                        <% res = res + g.results.last.set3H.to_s + ":" + g.results.last.set3G.to_s + " " %>
+                                      <% end %>
+                                      <% if g.results.last.set4H and g.results.last.set4G %>
+                                        <% res = res + g.results.last.set4H.to_s + ":" + g.results.last.set4G.to_s + " " %>
+                                      <% end %>
+                                      <% if g.results.last.set5H and g.results.last.set5G %>
+                                        <% res = res + g.results.last.set5H.to_s + ":" + g.results.last.set5G.to_s + " " %>
+                                      <% end %>
+                                    <% else %>
+                                     <%= link_to new_result_path(:game_id => g.id) do %>
+                                       <i class="btn btn-primary fa fa-plus">Resultat</i>
+                                     <% end %>
+                  									<% end %>
+                                     <%= link_to home_temptest_path(:game_id => g.id) do %>
+                                       <i class="btn btn-primary fa fa-list">Board</i>
+                                     <% end %>
+                    								<h3><%= res %></h3>
+                                  </td>
+                                </tr>
+                              </table>
+            								</div>
+            							</div>
+            						</li>
+            					
+            					<% end %>
+          
+          					</ul>
+          				</div>
+          				</div>
+          			</div>
+                
+              </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>

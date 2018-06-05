@@ -42,9 +42,6 @@
      <% @user.anonymous = false %>
      <% @user.superuser = false %>
      <% @user.webmaster = false %>
-     <% @user.calendar = false %>
-     <% @user.time_from = 9 %>
-     <% @user.time_to = 17 %>
      <%= f.hidden_field :geo_address, class:"form-control" %>
      <%= f.hidden_field :longitude, class:"form-control" %>
      <%= f.hidden_field :latitude, class:"form-control" %>
@@ -53,9 +50,6 @@
      <%= f.hidden_field :anonymous, class:"form-control" %>
      <%= f.hidden_field :superuser, class:"form-control" %>
      <%= f.hidden_field :webmaster, class:"form-control" %>
-     <%= f.hidden_field :calendar,class:"form-control" %>
-     <%= f.hidden_field :time_from, class:"form-control" %>
-     <%= f.hidden_field :time_to, class:"form-control" %>
       </white>
       <div class="actions">
             <%= f.submit (I18n.t :registrieren), class:"btn btn-primary btn-lg" %>

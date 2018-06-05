@@ -21,7 +21,7 @@
              <div class="col-md-6">
                  <div class="panel-body ueberschrift">
                       <div class="form-group">
-                        <%= f.label "Firmenlogo" %><br/>
+                        <%= f.label I18n.t :logo %><br/>
                          <% if @company.avatar_file_name %>
                              <%= image_tag @company.avatar(:medium) %>
                          <% end %>
@@ -61,10 +61,6 @@
                              </div>
                          <% end %>
                      <% end %>
-                     <div class="form-group">
-                        <input type="checkbox" name="my-checkbox2" checked>
-                       <%= f.label "gemeinnützig" %>
-                     </div>
                       <%= f.hidden_field :user_id %>
                      <div class="form-group">
                         <%= f.label "Adresse" %><br/>
@@ -92,22 +88,9 @@
                        <% end %>
                      </div>
                        <%= f.check_box :active, :id => "active", class:"form-control hidden"%>
-                       <%= f.check_box :social, :id => "social", class:"form-control hidden"%>
                        <%= f.check_box :partner, :id => "partner", class:"form-control hidden" %>
                  </div>
              </div>
-             <% if false %>
-             <div class="col-md-6">
-                 <div class="panel-body">
-                    <% if @company.latitude and @company.longitude %>
-                         <i class="fa fa-map-marker pull-left" onclick="return init_map(0);"></i>
-                         <div id="map">
-                           <div id="map-canvas"></div>
-                         </div>
-                    <% end %>
-                 </div>
-             </div>
-             <% end %>
          </div>
      <% end %>                
 
@@ -139,10 +122,6 @@
      $("[name='my-checkbox1']").bootstrapSwitch('state',<%= @company.active %>);
      $("[name='my-checkbox1']").on('switchChange.bootstrapSwitch', function () {
      $("#active").prop('checked',$("[name='my-checkbox1']").bootstrapSwitch('state'));
-     });
-     $("[name='my-checkbox2']").bootstrapSwitch('state',<%= @company.social %>);
-     $("[name='my-checkbox2']").on('switchChange.bootstrapSwitch', function () {
-     $("#social").prop('checked',$("[name='my-checkbox2']").bootstrapSwitch('state'));
      });
      $("[name='my-checkbox3']").bootstrapSwitch('state',<%= @company.partner %>);
      $("[name='my-checkbox3']").on('switchChange.bootstrapSwitch', function () {

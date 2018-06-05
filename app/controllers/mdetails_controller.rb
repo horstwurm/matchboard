@@ -19,7 +19,6 @@ class MdetailsController < ApplicationController
     else
       @mdetail.mtype = "details"
     end
-    @mdetail.textoptions = "text"
     @mdetail.sequence = @mdetail.mobject.mdetails.count
     
   end
@@ -63,7 +62,7 @@ class MdetailsController < ApplicationController
     end
 
     def mdetail_params
-      params.require(:mdetail).permit(:headline, :textoptions, :sequence, :status, :mobject_id, :name, :description, :avatar, :document, :video, :mtype)
+      params.require(:mdetail).permit(:sequence, :status, :mobject_id, :name, :description, :avatar, :document, :video, :mtype)
     end
 
 end

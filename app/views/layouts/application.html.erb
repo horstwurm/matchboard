@@ -1,9 +1,9 @@
 
 <% $controller_list = %w[mobjects companies users madvisors showcal] %>
 <% $wochentage = %w[Mo Di Mi Do Fr Sa So] %>
-<% $appurl = "https://tgcloud-horstwurm.c9users.io" %>
+<% $appurl = "https://mymatch-horstwurm.c9users.io" %>
 <% if false %>
-  <% $appurl = "mytgcloudtest.herokuapp.com" %>
+  <% $appurl = "mymatch.herokuapp.com" %>
 <% end %>
 <% $usemailgun = true %>
 <% init_apps %>
@@ -12,14 +12,14 @@
 <% $graph_color1 = "#BE9E21" %>
 <% $graph_color2 = "#495469" %> 
 <% $grey = "lightgrey" %>
-<% $app_name = "myTGCloud" %>
+<% $app_name = "myMatch" %>
 <% $sqllite = true %>
 <% I18n.locale = :de %>
 
 <!DOCTYPE html>
 <html>
   <head>
-    <title>TGCloud Plattform</title>
+    <title>myMatch Plattform</title>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
@@ -53,17 +53,15 @@
 </script>
 
   <body>
-  
-  <!--ganzer Bildschirm für digital signage-->
-  <% if (controller_name == "home" and action_name == "index18") %> 
-    <%= yield %>
-  <% else %>
 
+  <% if (controller_name == "home" and action_name == "temptest") %> 
+
+    <%= yield %>
+
+  <% else %>
     <div class="loader"></div>
     <div id="myDiv">
-
-      <%= render 'layouts/header' %>
-
+    <%= render 'layouts/header' %>
     <section id="yield" class="section-padding wow fadeIn delay-05s">
       <div class="container">
         <div class="row">
@@ -79,10 +77,11 @@
       </section>
     <% end %>
 
-      <%= render 'layouts/news' %>
 
       <% if false %>
   
+      <%= render 'layouts/newgame' %>
+
       <%= render 'layouts/feature' %>
   
       <%= render 'layouts/myservices' %>
@@ -97,14 +96,16 @@
 
       <%= render 'layouts/contact' %>
 
+      <%= render 'layouts/subscription' %>
+
       <% end %>  
 
       <% if user_signed_in? and (current_user.superuser or current_user.webmaster) %>
+        <%= render 'layouts/games' %>
         <%= render 'layouts/superuser' %>
       <% end %>
+      
       <%= render 'layouts/dashboard' %>
-
-      <%= render 'layouts/subscription' %>
 
       <%= render 'layouts/partner' %>
 

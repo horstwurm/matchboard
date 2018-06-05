@@ -1,10 +1,3 @@
-    <% if @mobject.allow == nil %>
-      <% @mobject.allow = true %>
-    <% end %>
-    <% if !@mobject.allowdays %>
-      <% @mobject.allowdays = 5 %>
-    <% end %>
-    
     <%= form_for @mobject, html: {multipart: true}  do |f| %>
 
         <% if @mobject.errors.any? %>
@@ -34,274 +27,14 @@
                   <%= f.label I18n.t :beschreibung %>
                   <%= f.text_area :description, rows: 5, class:"form-control"%>
                 </div>
-                
-                <div class="form-group">
-                <% case @mobject.mtype %>
-                  <% when "angebote" %>
-                    <%= f.label I18n.t :angebotsoptionen %>
-                      <%= f.select :msubtype, options_for_select([["Standard", "standard"],["Aktion", "aktion"]], @mobject.msubtype), {}, class:"form-control", :onchange => "showdata();" %>
-                  <% when "kleinanzeigen", "stellenanzeigen" %>
-                    <%= f.label I18n.t :suchenfinden %>
-                      <%= f.select :msubtype, options_for_select([["Suchen", "suchen"],["Anbieten", "anbieten"]], @mobject.msubtype), {}, class:"form-control", :onchange => "showdata();" %>
-                  <% when "crowdfunding" %>
-                    <%= f.label I18n.t :crowdfundingoptionen %>
-                      <%= f.select :msubtype, options_for_select([["Spenden", "spenden"],["Belohnungen", "belohnungen"],["Zinsen", "zinsen"]], @mobject.msubtype), {}, class:"form-control", :onchange => "showdata();" %>
-
-                <% end %><br>
-                </div>
-                
-                <% if @mobject.mtype == "sponsorantraege" %>
-                  <div class="form-group">
-                    <div class="form-group">
-                      <%= f.label I18n.t :sponsorenperiode %>
-                      <%= f.select :sponsorenperiode, options_for_select([["einmalig", "einmalig"],["periodisch", "periodisch"]], @mobject.sponsorenperiode), {}, class:"form-control", :onchange => "showdata();" %>
-                    </div>
-                    <%= f.label I18n.t :sponsorenbetragantrag %><br/>
-                    <div class="input-group">                          
-                      <%= f.number_field :sponsorenbetragantrag, :style => "text-align: Right", class:"form-control" %>
-                      <div class="input-group-addon">CHF</div>
-                    </div>
-                    <% if isowner(@mobject) or isdeputy(@mobject.owner) %>
-                      <div class="form-group">
-                        <%= f.label I18n.t :sponsorenstatus %>
-                        <%= f.select :sponsorenstatus, options_for_select([["beantragt", "beantragt"],["in Prüfung", "in Prüfung"],["abgelehnt", "abgelehnt"],["genehmigt", "genehmigt"],["genehmingt mit Anpassungen", "genehmigt mit Anpassungen"]], @mobject.sponsorenstatus), {}, class:"form-control", :onchange => "showdata();" %>
-                      </div>
-                      <%= f.label I18n.t :sponsorenbetraggenehmigt %><br/>
-                      <div class="input-group">                          
-                        <%= f.number_field :sponsorenbetraggenehmigt, :style => "text-align: Right", class:"form-control" %>
-                        <div class="input-group-addon">CHF</div>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <%= f.label I18n.t :sponsorenantwort %>
-                      <%= f.text_area :sponsorenantwort, rows: 5, class:"form-control"%>
-                    </div>
-                  <% else %>
-                     <%= f.hidden_field :sponsorenstatus %>
-                     <%= f.hidden_field :sponsorenbetraggenehmigt %>
-                     <%= f.hidden_field :sponsorenantwort %>
-                  <% end %>
-                <% end %>
-
-                <% if @mobject.mtype == "projekte" %>
-                  <div class="form-group">
-                    <%= f.label I18n.t :risiko %>
-                    <%= f.select :risk, options_for_select(["hoch", "mittel", "tief"], @mobject.risk), {}, class:"form-control" %>
-                    <%= f.label I18n.t :qualitaet %>
-                    <%= f.select :quality, options_for_select(["hoch", "mittel", "tief"], @mobject.quality), {}, class:"form-control" %>
-                  </div>
-                <% end %>
-
-                <% if @mobject.mtype == "stellenanzeigen" %>
-                  <div class="form-group">
-                    <% if @mobject.msubtype == "Suchen" %>
-                      <%= f.label I18n.t :referenzen %><br/>
-                    <% else %>
-                      <%= f.label I18n.t :aufgaben %><br/>
-                    <% end %>
-                    <%= f.text_area :tasks, rows: 5, class:"form-control"%>
-                    <%= f.label I18n.t :qualifikationen %><br/>
-                    <%= f.text_area :skills, rows: 5, class:"form-control"%>
-                    <%= f.label I18n.t :joboffer %><br/>
-                    <%= f.text_area :offers, rows: 5, class:"form-control"%>
-                  </div>
-                <% end %>
-
                 <div class="form-group">
                   <%= f.label I18n.t :kategorie %>
-                  <% case @mobject.mtype %>
-                    <% when "ausschreibungen", "stellenanzeigen" %>
-                      <%= f.collection_select :mcategory_id, Mcategory.where('ctype=?',"branche").order(:name), :id, :name, {}, :readonly => true, class:"form-control" %>
-                  <% else %>
-                    <%= f.collection_select :mcategory_id, Mcategory.where('ctype=?',@mobject.mtype).order(:name), :id, :name, {}, :readonly => true, id:"cat", class:"form-control", :onchange => "showdata2();" %>
-                  <% end %>
+                  <%= f.collection_select :mcategory_id, Mcategory.where('ctype=?',@mobject.mtype).order(:name), :id, :name, {}, :readonly => true, id:"cat", class:"form-control", :onchange => "showdata2();" %>
                 </div>
                 <div class="form-group">
                   <%= f.label I18n.t :homepage %>
                   <%= f.text_field :homepage, class:"form-control"%>
                 </div>
-                <% case @mobject.mtype %>
-                  <% when "veranstaltungen", "ausschreibungen", "kleinanzeigen", "stellenanzeigen", "crowdfunding", "umfragen", "projekte", "innovationswettbewerbe", "kampagnen", "standorte", "sponsorenantraege" %>
-                    <% if @mobject.msubtype != "standard" %>
-                      <div class="form-group">
-                        <%= f.label "Datum von-bis:" %>
-                        <div class="input-group">
-                          <%= f.text_field :date_from, :value => (@mobject.date_from), :style => "text-align: Right", class:"form-control" %>
-                          <div class="input-group-addon"> Datum von</div>
-                        </div>
-                        <div class="input-group">
-                          <%= f.text_field :date_to, :value => (@mobject.date_to), :style => "text-align: Right", class:"form-control" %>
-                          <div class="input-group-addon"> Datum bis</div>
-                        </div>
-                      </div>
-                    <% end %>
-                    <% if @mobject.mtype == "veranstaltungen" %>
-                      <div class="form-group">
-                        <input type="checkbox" name="my-checkbox3" checked>
-                        <%= f.label I18n.t :anmeldungobligatorisch %>
-                      </div>
-                    <% end %>
-
-                    <% if @mobject.mtype == "crowdfunding" %>
-                        <div class="form-group">
-                          <%= f.label I18n.t :betrag %>
-                          <div class="input-group">                          
-                            <%= f.number_field :amount, :value => number_with_precision(@mobject.amount, :precision => 2), :style => "text-align: Right", class:"form-control" %>
-                            <div class="input-group-addon"><%= I18n.t :waehrung %></div>
-                          </div>
-                        </div>
-                        <div class="belohnungen">
-                          <div class="form-group">
-                            <%= f.label I18n.t :stueckelung %><br/>
-                            <div class="input-group">                          
-                              <%= f.number_field :price, :value => number_with_precision(@mobject.price, :precision => 2), :style => "text-align: Right", class:"form-control" %>
-                              <div class="input-group-addon">CHF</div>
-                            </div>
-                          </div>
-                         <div class="form-group">
-                            <%= f.label I18n.t :belohnung %><br/>
-                            <%= f.text_field :reward, class:"form-control"%>
-                          </div>
-                        </div>
-
-                        <div class="zinsen">
-                          <div class="form-group">
-                            <%= f.label I18n.t :zinssatz %><br/>
-                            <div class="input-group">                          
-                              <%= f.number_field :interest_rate, :value => number_with_precision(@mobject.interest_rate, :precision => 1), :style => "text-align: Right", class:"form-control" %>
-                              <div class="input-group-addon">%</div>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <%= f.label I18n.t :rueckzahlungam %>
-                            <div class="input-group">
-                              <%= f.text_field :due_date, :value => (@mobject.due_date), :style => "text-align: Right", class:"form-control" %>
-                              <div class="input-group-addon"> Datum</div>
-                            </div>
-                          </div>
-                        </div>
-
-                    <% end %>
-
-                    <% if @mobject.mtype == "projekte" %>
-                        <div class="form-group">
-                          <% if !@mobject.sum_paufwand_ist %>
-                            <% @mobject.sum_paufwand_ist = 0 %>
-                          <% end %>
-                          <% if !@mobject.sum_pkosten_ist %>
-                            <% @mobject.sum_pkosten_ist = 0 %>
-                          <% end %>
-                          <b><%= I18n.t :plankosten %></b>
-                          <div class="input-group">                          
-                            <!--<%= f.number_field :sum_pkosten_plan, :value => number_with_precision(@mobject.sum_pkosten_plan, :precision => 2), :style => "text-align: Right", class:"form-control" %>-->
-                            <%= f.number_field :sum_pkosten_plan, :step => 0.1, :precicion => 2, :style => "text-align: Right", class:"form-control" %>
-                            <div class="input-group-addon"><%= (I18n.t :waehrung) %></div>
-                          </div>
-                          <b><%= I18n.t :planaufwand %></b>
-                          <div class="input-group">                          
-                            <%= f.number_field :sum_paufwand_plan, :value => number_with_precision(@mobject.sum_paufwand_plan, :precision => 0), :style => "text-align: Right", class:"form-control" %>
-                            <div class="input-group-addon"><%= (I18n.t :personentage) %></div>
-                          </div>
-                          <%= f.label I18n.t :kostenstelle %>
-                          <%= f.text_field :costinfo, class:"form-control"%>
-                          <%= f.label I18n.t :auftragsnummer %>
-                          <%= f.text_field :reward, class:"form-control"%>
-                        </div>
-                        <div class="form-group">
-                          <input type="checkbox" name="my-checkbox7" checked>
-                          <% if @mobject.allow == nil %>
-                            <% @mobject.allow = true %>
-                          <% end %>
-                          <%= f.label "Buchungskontrolle" %>
-                          <% if !@mobject.allowdays %>
-                            <% @mobject.allowdays = 5 %>
-                          <% end %>
-                          <div class="input-group">                          
-                            <%= f.number_field :allowdays, :style => "text-align: Right", class:"form-control" %>
-                            <div class="input-group-addon"><%= ("erlaubt bis zum n.Tag im Folgemonat") %></div>
-                          </div>
-                        </div>
-                    <% end %>
-
-                    <% if @mobject.mtype == "kleinanzeigen" and @mobject.msubtype == "anbieten" %>
-                        <div class="anbieten">
-                          <div class="form-group">
-                            <%= f.label I18n.t :price %>
-                            <div class="input-group">                          
-                                <%= f.number_field :price, :style => "text-align: Right", class:"form-control" %>
-                                <div class="input-group-addon"><%= I18n.t :waehrung %></div>
-                            </div>
-                          </div>
-                        </div>
-                    <% end %>
-
-                  <% when "sensoren" %>
-                    <div class="werte">
-                      <%= f.label I18n.t :wertebereich %>
-                      <div class="input-group">
-                        <%= f.text_field :mini, :value => (@mobject.mini), :style => "text-align: Right", class:"form-control" %>
-                        <div class="input-group-addon"> <%= (I18n.t :min) %></div><br>
-                      </div>
-                      <div class="input-group">
-                        <%= f.text_field :maxi, :value => (@mobject.maxi), :style => "text-align: Right", class:"form-control" %>
-                        <div class="input-group-addon"> <%= (I18n.t :max) %></div>
-                      </div>
-                      <%= f.label I18n.t :alarmierung %>
-                      <div class="input-group">
-                        <%= f.text_field :alert, :value => (@mobject.alert), :style => "text-align: Right", class:"form-control" %>
-                        <div class="input-group-addon"> <%= (I18n.t :alarmierung) %></div><br>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <input type="checkbox" name="my-checkbox5" checked><%= f.label I18n.t :textalertlow %>
-                    </div>
-
-                  <% when "publikationen" %>
-                  <% when "vermietungen" %>
-                      <% if false %>
-                        <div class="form-group">
-                          <%= f.label I18n.t :zeitvonbis %>
-                          <div class="form-group">
-                          <input id="ex1" type="text" class="span2" value="" data-slider-min="0" data-slider-max="24" data-slider-step="1" data-slider-value="[<%= @mobject.time_from %>,<%= @mobject.time_to %>]"/> <b> Uhrzeit: von-bis</b>
-                          </div>
-                        </div>
-                      <% end %>
-
-                  <% when "angebote" %>
-                      <div class="form-group">
-                        <input type="checkbox" name="my-checkbox2" checked>
-                        <%= f.label I18n.t :sozialengagement %>
-                      </div>
-
-                      <div class="aktion">
-                        <div class="form-group">
-                          <%= f.label I18n.t :datumvonbis %>
-                          <div class="input-group">
-                            <%= f.text_field :date_from, :value => (@mobject.date_from), :style => "text-align: Right", class:"form-control" %>
-                            <div class="input-group-addon"> Datum von</div>
-                          </div>
-                          <div class="input-group">
-                            <%= f.text_field :date_to, :value => (@mobject.date_to), :style => "text-align: Right", class:"form-control" %>
-                            <div class="input-group-addon"> Datum bis</div>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <%= f.label I18n.t :preis %>
-                          <div class="input-group">                          
-                            <%= f.number_field :price_reg, :style => "text-align: Right", class:"form-control" %>
-                            <div class="input-group-addon"><%= (I18n.t :waehrung) %></div>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <%= f.label I18n.t :aktionspreis %>
-                          <div class="input-group">                          
-                            <%= f.number_field :price_new, :style => "text-align: Right", class:"form-control" %>
-                            <div class="input-group-addon"><%= (I18n.t :waehrung) %></div>
-                          </div>
-                        </div>
-                      </div>
-
-                <% end %>
                 <div class="form-group">
                    <%= f.label I18n.t :adresse %>
                    <%= f.text_field :address1, class:"form-control" %>
@@ -312,34 +45,17 @@
                   <%= f.label I18n.t :stichworte %>
                   <%= f.text_field :keywords, class:"form-control"%>
                 </div>
-
-
-                <% if @mobject.mtype != "sponsorantraege" %>
-                  <div class="form-group">
-                    <input type="checkbox" name="my-checkbox6" checked>
-                    <%= f.label I18n.t :signage %>
-                  </div>
-                  <div class="form-group">
-                    <input type="checkbox" name="my-checkbox4" checked>
-                    <%= f.label I18n.t :onlinepublikation %>
-                  </div>
-                <% end %>
                 <div class="form-group">
                   <input type="checkbox" name="my-checkbox1" checked>
                   <%= f.label I18n.t :active %>
                 </div>
                  <%= f.hidden_field :mtype, class:"form-control" %>
-                 <%= f.hidden_field :parent %>
                  <%= f.hidden_field :status, class:"form-control" %>
-                 <%= f.hidden_field :requester_id %>
-                 <%= f.hidden_field :requester_type %>
                  <%= f.hidden_field :owner_id %>
                  <%= f.hidden_field :owner_type %>
                  <%= f.hidden_field :geo_address, class:"form-control" %>
                  <%= f.hidden_field :longitude, class:"form-control" %>
                  <%= f.hidden_field :latitude, class:"form-control" %>
-                 <%= f.number_field :time_from, :id => "time_from", class:"form-control hidden"%>
-                 <%= f.number_field :time_to, :id => "time_to", class:"form-control hidden"%>
                 <div class="actions">
                    <%= f.submit (I18n.t :speichern),  class:"btn btn-primary btn-lg btn-submit"%>
                   <% if @mobject.owner_type == "User" %>
@@ -353,53 +69,13 @@
                     <% end %>
                   <% end %>
                 </div>
-                <%= f.check_box :allow, :id => "allow", class:"form-control hidden" %>
-                <%= f.check_box :alertlow, :id => "alertlow", class:"form-control hidden" %>
                 <%= f.check_box :active, :id => "active", class:"form-control hidden" %>
-                <%= f.check_box :social, :id => "social", class:"form-control hidden" %>
-                <%= f.check_box :eventpart, :id => "eventpart", class:"form-control hidden" %>
                 <%= f.check_box :online_pub, :id => "online_pub", class:"form-control hidden" %>
-                <%= f.check_box :signage, :id => "signage", class:"form-control hidden" %>
               </div>
           </div>
-          <% if false %>
-          <div class="col-md-6">
-            <div class="panel-body">
-              <% if @mobject.latitude and @mobject.longitude %>
-                <div id="map">
-                  <div id="map-canvas"></div>
-                </div>
-              <% end %>
-          </div>
-          <% end %>
-
         </div>
     </div>
 <% end %>                
-
-<% if false %>
-<% if @mobject.latitude and @mobject.longitude %>
-<script type="text/javascript">
-    var latitudes = [<%= @mobject.latitude %>];
-    var longitudes = [<%= @mobject.longitude %>];
-    function init_map(index) {
-        var myLocation = new google.maps.LatLng(latitudes[index], longitudes[index]);
-        var mapOptions = {
-            center: myLocation,
-            zoom: 16
-        };
-        var marker = new google.maps.Marker({
-            position: myLocation,
-            title: "Property Location"
-        });
-        var map = new google.maps.Map(document.getElementById("map"),
-        mapOptions);
-        marker.setMap(map);
-    }
-    init_map(0);
-</script>
-<% end %>
-<% end %>
 
 <script>
      $("#ex1").slider({});
@@ -412,119 +88,8 @@
      $("[name='my-checkbox1']").on('switchChange.bootstrapSwitch', function () {
      $("#active").prop('checked',$("[name='my-checkbox1']").bootstrapSwitch('state'));
      });
-     $("[name='my-checkbox2']").bootstrapSwitch('state',<%= @mobject.social %>);
-     $("[name='my-checkbox2']").on('switchChange.bootstrapSwitch', function () {
-     $("#social").prop('checked',$("[name='my-checkbox2']").bootstrapSwitch('state'));
-     });
-     $("[name='my-checkbox3']").bootstrapSwitch('state',<%= @mobject.eventpart %>);
-     $("[name='my-checkbox3']").on('switchChange.bootstrapSwitch', function () {
-     $("#eventpart").prop('checked',$("[name='my-checkbox3']").bootstrapSwitch('state'));
-     });
      $("[name='my-checkbox4']").bootstrapSwitch('state',<%= @mobject.online_pub %>);
      $("[name='my-checkbox4']").on('switchChange.bootstrapSwitch', function () {
      $("#online_pub").prop('checked',$("[name='my-checkbox4']").bootstrapSwitch('state'));
      });
-     $("[name='my-checkbox5']").bootstrapSwitch('state',<%= @mobject.alertlow %>);
-     $("[name='my-checkbox5']").on('switchChange.bootstrapSwitch', function () {
-     $("#alertlow").prop('checked',$("[name='my-checkbox5']").bootstrapSwitch('state'));
-     });
-     $("[name='my-checkbox6']").bootstrapSwitch('state',<%= @mobject.signage %>);
-     $("[name='my-checkbox6']").on('switchChange.bootstrapSwitch', function () {
-     $("#signage").prop('checked',$("[name='my-checkbox6']").bootstrapSwitch('state'));
-     });
-     $("[name='my-checkbox7']").bootstrapSwitch('state',<%= @mobject.allow %>);
-     $("[name='my-checkbox7']").on('switchChange.bootstrapSwitch', function () {
-     $("#allow").prop('checked',$("[name='my-checkbox7']").bootstrapSwitch('state'));
-     });
 </script>
-
-<script type="text/javascript">
-  $(document).ready(function(){
-    $('#mobject_date_from').datepicker({
-        format: "yyyy-mm-dd",
-        weekStart: 1,
-        language: "de",
-        daysOfWeekHighlighted: "0,6",
-        todayBtn: true,
-        todayHighlight: true,
-        firstDay: 1}
-    );
-    $('#mobject_date_to').datepicker({
-        format: "yyyy-mm-dd",
-        weekStart: 1,
-        language: "de",
-        daysOfWeekHighlighted: "0,6",
-        todayBtn: true,
-        todayHighlight: true,
-        firstDay: 1}
-    );
-    $('#mobject_due_date').datepicker({
-        format: "yyyy-mm-dd",
-        weekStart: 1,
-        language: "de",
-        daysOfWeekHighlighted: "0,6",
-        todayBtn: true,
-        todayHighlight: true,
-        firstDay: 1}
-    );
-  });
-</script>
-
-<script>
-  function showdata() {
-    // alert($("#mobject_msubtype").val());
-    <% case @mobject.mtype %>
-      <% when "angebote" %>
-        if ($("#mobject_msubtype").val() == "aktion") {
-          $(".aktion").show();
-          $(".standard").hide();
-        }
-        if ($("#mobject_msubtype").val() == "standard") {
-          $(".aktion").hide();
-          $(".standard").show();
-        }
-        
-      <% when "kleinanzeigen" %>
-        if ($("#mobject_msubtype").val() == "anbieten") {
-          $(".anbieten").show();
-        }
-        if ($("#mobject_msubtype").val() == "suchen") {
-          $(".anbieten").hide();
-        }
-
-      <% when "crowdfunding" %>
-        $(".zinsen").hide();
-        $(".belohnungen").hide();
-        if ($("#mobject_msubtype").val() == "belohnungen") {
-          $(".belohnungen").show();
-          $(".zinsen").hide();
-        }
-        if ($("#mobject_msubtype").val() == "zinsen") {
-          $(".zinsen").show();
-          $(".belohnungen").hide();
-        }
-    <% end %>
-  }
-</script>
-
-<script>
-  function showdata2() {
-
-    var e = document.getElementById("cat");
-    var txt = e.options[e.selectedIndex].text;
-    <% case @mobject.mtype %>
-      <% when "sensoren" %>
-        if (txt == "Wert") {
-          $(".werte").show();
-        }
-        if (txt == "Schalter") {
-          $(".werte").hide();
-        }
-    <% end %>
-  }
-</script>
-
-<script>
-  document.addEventListener("turbolinks:load", function() {init_map(0);showdata();})
-</script>
-

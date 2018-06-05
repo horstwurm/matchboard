@@ -50,42 +50,7 @@
                       <input type="checkbox" name="my-checkbox2" checked>
                       <%= f.label I18n.t :anonym %>
                     </div>
-                    <div class="form-group">
-                      <input type="checkbox" name="my-checkbox1" checked>
-                      <%= f.label I18n.t :kalender %>
-                    </div>
-
-                    <% if false %>
-                   <label class="switch">
-                        <%= f.check_box :anonymous, class:"sliders round" %>
-                        <span class="sliders round"></span>
-                    </label>
-                    <%= f.label I18n.t :anonym %>    
-                    <br>
-                    <label class="switch">
-                        <%= f.check_box :calendar, class:"sliders round" %>
-                        <span class="sliders round"></span>
-                    </label>
-                    <%= f.label I18n.t :kalender %> 
-                    <%= f.check_box :anonymous, class:"checkboxForm" %>
-                    <%= f.label I18n.t :anonym %> 
-                    <br>
-                    <%= f.check_box :calendar, class:"checkboxForm",  :name => 'my-checkbox1' %>
-                    <%= f.label I18n.t :ckalender %> 
-                    <% end %>
-                    
-                      <slider>
-                        <b><%= I18n.t :uhrzeitvonbis %></b> <input id="ex2" type="text" class="span2" value="" data-slider-min="0" data-slider-max="24" data-slider-step="1" data-slider-value="[<%= @user.time_from %>,<%= @user.time_to %>]"/>
-                      </slider>
-                      <br><br>
                     <% if current_user.superuser %>
-                         <% if false %>
-                        <label class="switch">
-                            <%= f.check_box :webmaster, class:"sliders round" %>
-                            <span class="sliders round"></span>
-                        </label>
-                        <%= f.label I18n.t :webmaster %> 
-                        <% end %>
                          <br>
                          <div class="form-group">
                           <input type="checkbox" name="my-checkbox4" checked>
@@ -104,24 +69,10 @@
                        <%= f.text_field :phone2, class:"form-control" %>
                     </div>
                     <div class="form-group">
-                       <%= f.label I18n.t :kostenstelle %>
-                       <%= f.text_field :costinfo, class:"form-control" %>
-                       <%= f.label I18n.t :standardstundensatz %>
-                        <div class="input-group">                          
-                          <%= f.number_field :rate, :style => "text-align: Right", class:"form-control" %>
-                          <div class="input-group-addon"><%= I18n.t :waehrung %></div>
-                        </div>
-                       <%= f.label I18n.t :organisation %>
-                       <%= f.text_field :org, class:"form-control" %>
+                       <%= f.label I18n.t :classificacion %>
+                       <%= f.text_field :classificacion, class:"form-control" %>
                     </div>
-                     <% if false %>
-                    <label class="switch">
-                        <%= f.check_box :active, class:"sliders round" %>
-                        <span class="sliders round"></span>
-                    </label>
-                    <%= f.label I18n.t :active %> 
-                    <% end %>
-                     <br>
+                    <br>
                     <div class="form-group">
                       <input type="checkbox" name="my-checkbox3" checked>
                       <%= f.label I18n.t :active %>
@@ -138,14 +89,9 @@
                     </div>
                 </div>
                     <div>
-                       <% if true %>
-                       <%= f.check_box :calendar, :id => "calendar", class:"form-control hidden" %>
                        <%= f.check_box :anonymous, :id => "anonymous", class:"form-control hidden"%>
                        <%= f.check_box :active, :id => "active", class:"form-control hidden" %>
                        <%= f.check_box :webmaster, :id => "webmaster", class:"form-control hidden"%>
-                       <% end %>
-                       <%= f.number_field :time_from, :id => "from",  class:"form-control hidden" %>
-                       <%= f.number_field :time_to, :id => "to", class:"form-control hidden" %>
                     </div>
             </div>
             <% if false %>    
@@ -165,7 +111,6 @@
         </div>
     <% end %>
 
-<% if false %>
 <% if @user.latitude and @user.longitude %>
 <script type="text/javascript">
     var latitudes = [<%= @user.latitude %>];
@@ -187,7 +132,6 @@
     init_map(0);
 </script>
 <% end %>
-<% end %>
 
 <script>
   $(document).ready(function(){
@@ -197,14 +141,6 @@
     	$("#to").val(slideEvt.value[1]);
     });
     $.fn.bootstrapSwitch.defaults.onColor = 'mycolor';
-    $("[name='my-checkbox1']").bootstrapSwitch('state',<%= @user.calendar %>);
-    $("[name='my-checkbox1']").on('switchChange.bootstrapSwitch', function () {
-    $("#calendar").prop('checked',$("[name='my-checkbox1']").bootstrapSwitch('state'));
-    if ($("[name='my-checkbox1']").bootstrapSwitch('state') == false) 
-        {$("slider").hide()}
-    else
-        {$("slider").show()}
-    });
     $("[name='my-checkbox2']").bootstrapSwitch('state',<%= @user.anonymous %>);
     $("[name='my-checkbox2']").on('switchChange.bootstrapSwitch', function () {
     $("#anonymous").prop('checked',$("[name='my-checkbox2']").bootstrapSwitch('state'));

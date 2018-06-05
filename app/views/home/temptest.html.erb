@@ -1,1 +1,477 @@
-nothing
+<head>
+<link href='https://fonts.googleapis.com/css?family=Bungee Hairline' rel='stylesheet'>
+</head>
+
+<style>
+.sevenseg-big {
+  font-family: 'Bungee Hairline';
+  font-size: 500px;
+  font-weight: bold;
+  background-color:black;
+}
+
+.yellow {
+    color:yellow;
+  }
+.red {
+    color:red;
+  }
+.green {
+    color:green;
+  }
+.white {
+    color:white;
+  }
+
+.wb {
+    color:green;
+    background-color:white;
+  }
+
+.small {
+  font-size: 60px;
+  background-color:black;
+}
+
+.huge {
+  font-size: 200px;
+}
+
+</style>
+
+<div class="small">
+<table>
+    <tr>
+      <th>
+          <div class="sevenseg-big small">
+              Name
+          </div>
+      </th>
+      <th colspan="3">
+          <div class="sevenseg-big small">
+              Set
+          </div>
+      </th>
+      <th colspan="2">
+          <div class="sevenseg-big small">
+              Game
+          </div>
+      </th>
+    </tr>
+    <tr>
+        <td>
+            <div class="sevenseg-big small" id="player1">
+                <% if @game.player2 %>
+                  <% @user = User.where('email=?', @game.player2).first %>
+                  <% if @user %>
+                    <% n = @user.name + " " + @user.lastname %>
+                  <% else %>
+                    <% n = player2 %>
+                  <% end %>
+                <%= n %>
+                <% end %>
+            </div>
+        </td>
+        <td>
+            <div class="sevenseg-big red huge">
+                <div id="set1G">
+                <%= @result.set1G if @result.set1G %>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="sevenseg-big red huge">
+                <div id="set2G">
+                <%= @result.set2G if @result.set2G %>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="sevenseg-big red huge">
+                <div id="set3G">
+                <%= @result.set3G if @result.set3G %>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="sevenseg-big yellow huge">
+                <div id="gameG">
+                <%= @result.gameG %>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="sevenseg-big yellow small">
+              <i class="fa fa-bullseye"></i>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="sevenseg-big small">
+                <% if @game.player1 %>
+                  <% @user = User.where('email=?', @game.player1).first %>
+                  <% if @user %>
+                    <% n = @user.name + " " + @user.lastname %>
+                  <% else %>
+                    <% n = player1 %>
+                  <% end %>
+                <%= n %>
+                <% end %>
+            </div>
+        </td>
+        <td>
+            <div class="sevenseg-big red huge">
+                <div id="set1H">
+                <%= @result.set1H if @result.set1H %>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="sevenseg-big red huge">
+                <div id="set2H">
+                <%= @result.set2H if @result.set2H %>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="sevenseg-big red huge">
+                <div id="set3H">
+                <%= @result.set3H if @result.set3H %>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="sevenseg-big yellow huge">
+                <div id="gameH">
+                <%= @result.gameH %>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="sevenseg-big">
+                
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="sevenseg big small">
+              <div id="clock"> Uhr</div>
+            </div>
+        </td>
+        <td colspan="3">
+            <div class="sevenseg big small red">
+              <div id="timer1"></div>
+            </div>
+        </td>
+        <td colspan="2">
+            <div class="sevenseg big small yellow">
+              <div id="timer2"></div>
+            </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+         <%= link_to home_index3_path() do %>
+           <i class="btn btn-default">myMatch</i>
+         <% end %>
+        </td>
+    </tr>
+</table>
+</div>
+
+<script>
+$(document).ready(function(){
+
+    window.setInterval( calldb, 5000 );
+
+    function callme() {
+      //alert($.now());
+      var d = new Date();
+      var n = d.toLocaleTimeString();
+      //$("#timer").text($.now());
+      $("#clock").text(n);
+      $("#timer1").text(n);
+      $("#timer2").text(n);
+    }
+    
+   function calldb() {
+        $.ajax({
+            url: "https://mymatch-horstwurm.c9users.io/home/getResult.json?game_id=13",
+            //force to handle it as text
+            dataType: "text",
+            success: function(data) {
+                //data downloaded so we call parseJSON function 
+                //and pass downloaded data
+                var json = $.parseJSON(data);
+                //alert(json[0].s1H);
+
+                $("#set1G").text(json[0].s1G);
+                $("#set2G").text(json[0].s2G);
+                $("#set3G").text(json[0].s3G);
+                $("#gameG").text(json[0].gameG);
+
+                $("#set1H").text(json[0].s1H);
+                $("#set2H").text(json[0].s2H);
+                $("#set3H").text(json[0].s3H);
+                $("#gameH").text(json[0].gameH);
+                
+                // alert(json[0].kategorie + " " + json[0].anzahl);
+                // alert(json[1].kategorie + " " + json[1].anzahl);
+                // alert(json[2].kategorie + " " + json[2].anzahl);
+                //now json variable contains data in json format
+                //let's display a few items
+                // for (var i=0;i<json.length;++i)
+                // {
+                //     $('#results').append('<div class="name">' + json[i].anzahl + '</>');
+                // }
+                // i=Math.round(Math.random()*1000);
+                // dataset.push([Date(), i]);
+                // $("#results").append('test');
+
+            }
+        });
+    }
+});
+</script>
+
+
+<% if false %>
+<style>
+
+.clock {
+  height:200px;
+  //position:absolute;
+  top:150%;
+  left:50%;
+  width:900px;
+  //margin-left:-450px;
+  //margin-top:-100px;
+  text-align:center;
+}
+
+.digit {
+  width:120px;
+  height:200px;
+  margin:0 5px;
+  position:relative;
+  display:inline-block;
+}
+
+.digit .segment {
+  //background:#c00;
+  background:#0000ff;
+  border-radius:5px;
+  position:absolute;
+  opacity:0.15;
+  transition:opacity 0.2s;
+  -webkit-transition:opacity 0.2s;
+  -ms-transition:opacity 0.2s;
+  -moz-transition:opacity 0.2s;
+  -o-transition:opacity 0.2s;
+}
+
+.digit .segment.on, .separator {
+  opacity:1;
+  box-shadow:0 0 50px rgba(255,0,0,0.7);
+  transition:opacity 0s;
+  -webkit-transition:opacity 0s;
+  -ms-transition:opacity 0s;
+  -moz-transition:opacity 0s;
+  -o-transition:opacity 0s;
+}
+
+.separator {
+  width:20px;
+  height:20px;
+  background:#c00;
+  border-radius:50%;
+  display:inline-block;
+  position:relative;
+  top:-90px;
+}
+
+.digit .segment:nth-child(1) {
+  top:10px;
+  left:20px;
+  right:20px;
+  height:10px;
+}
+
+.digit .segment:nth-child(2) {
+  top:20px;
+  right:10px;
+  width:10px;
+  height:75px;
+  height:calc(50% - 25px);
+}
+
+.digit .segment:nth-child(3) {
+  bottom:20px;
+  right:10px;
+  width:10px;
+  height:75px;
+  height:calc(50% - 25px);
+}
+
+.digit .segment:nth-child(4) {
+  bottom:10px;
+  right:20px;
+  height:10px;
+  left:20px;
+}
+
+.digit .segment:nth-child(5) {
+  bottom:20px;
+  left:10px;
+  width:10px;
+  height:75px;
+  height:calc(50% - 25px);
+}
+
+.digit .segment:nth-child(6) {
+  top:20px;
+  left:10px;
+  width:10px;
+  height:75px;
+  height:calc(50% - 25px);
+}
+
+.digit .segment:nth-child(7) {
+  bottom:95px;
+  bottom:calc(50% - 5px);
+  right:20px;
+  left:20px;
+  height:10px;
+}
+</style>
+
+<div class="clock" style="background-color:#000000">
+  <div class="digit hours">
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+  </div>
+
+  <div class="digit hours">
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+  </div>
+
+  <div class="separator"></div>
+
+  <div class="digit minutes">
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+  </div>
+
+  <div class="digit minutes">
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+  </div>
+
+  <div class="separator"></div>
+
+  <div class="digit seconds">
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+  </div>
+
+  <div class="digit seconds">
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+    <div class="segment"></div>
+  </div>
+</div>
+<script>
+var digitSegments = [
+    [1,2,3,4,5,6],
+    [2,3],
+    [1,2,7,5,4],
+    [1,2,7,3,4],
+    [6,7,2,3],
+    [1,6,7,3,4],
+    [1,6,5,4,3,7],
+    [1,2,3], 
+    [1,2,3,4,5,6,7],
+    [1,2,7,3,6]
+]
+
+document.addEventListener('DOMContentLoaded', function() {
+  var _hours = document.querySelectorAll('.hours');
+  var _minutes = document.querySelectorAll('.minutes');
+  var _seconds = document.querySelectorAll('.seconds');
+  
+  setInterval(function() {
+    var date = new Date();
+    var hours = date.getHours(), minutes = date.getMinutes(), seconds = date.getSeconds();  
+    
+    setNumber(_hours[0], Math.floor(hours/10), 1);
+    setNumber(_hours[1], hours%10, 1);
+
+    setNumber(_minutes[0], Math.floor(minutes/10), 1);
+    setNumber(_minutes[1], minutes%10, 1);
+
+    setNumber(_seconds[0], Math.floor(seconds/10), 1);
+    setNumber(_seconds[1], seconds%10, 1);
+  }, 1000);
+});
+
+var setNumber = function(digit, number, on) {
+  var segments = digit.querySelectorAll('.segment');
+  var current = parseInt(digit.getAttribute('data-value'));
+
+  // only switch if number has changed or wasn't set
+  if (!isNaN(current) && current != number) {
+    // unset previous number
+    digitSegments[current].forEach(function(digitSegment, index) {
+      setTimeout(function() {
+        segments[digitSegment-1].classList.remove('on');
+      }, index*45)
+    });
+  }
+  
+  if (isNaN(current) || current != number) {
+    // set new number after
+    setTimeout(function() {
+      digitSegments[number].forEach(function(digitSegment, index) {
+        setTimeout(function() {
+          segments[digitSegment-1].classList.add('on');
+        }, index*45)
+      });
+    }, 250);
+    digit.setAttribute('data-value', number);
+  }
+}
+
+</script>
+<% end %>

@@ -1,0 +1,156 @@
+    <%= form_for @game do |f| %>
+
+        <% if @game.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@game.errors.count, "error") + " " + (I18n.t :notsaved )%></h2>
+              <ul>
+                  <% @game.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+              </ul>
+            </div>
+        <% end %>
+
+        <div class="row">
+            <div class="col-md-12" style="color:white">
+                <div class="panel" style="background-color:#bf6a43">
+
+                    <% if false %>
+                    <div class="form-group">
+                       <%= link_to new_game_path(:user_id => current_user.id, :mobject_id => 1) do %>
+                         <i class="btn btn-primary fa fa-plus"></i>
+                       <% end %>
+                       <%= f.label @game.mobject.name %><br>
+                     </div>
+                     <br>
+
+                    <div class="form-group">
+                      <%= f.label I18n.t :mcategory %>
+                      <% if false %>
+                      <%= f.number_field :mcategory_id, class: "form-control", :onchange => "showdata();" %>
+                      <% end %>
+                      <% if true %>
+                      <%= f.collection_select :mcategory_id, Mcategory.where('ctype=?',"matchtype").order(:name), :id, :name, {}, class:"form-control", :onchange => "showdata();" %>
+                      <% end %>
+                    </div>
+                    <br>
+
+                    <div class="form-group">
+                       <%= link_to new_game_path(:user_id => current_user.id, :mobject_id => 1) do %>
+                         <i class="btn btn-primary fa fa-plus"></i>
+                       <% end %>
+                      <%= f.label I18n.t :player1 %>
+                      <%= f.text_field :player1, autofocus: true, class:"form-control"%>
+                    </div>
+                    <div class="form-group">
+                       <%= link_to new_game_path(:user_id => current_user.id, :mobject_id => 1) do %>
+                         <i class="btn btn-primary fa fa-plus"></i>
+                       <% end %>
+                      <%= f.label I18n.t :player2 %>
+                      <%= f.text_field :player2, class:"form-control"%>
+                    </div>
+                    <br>
+                    <div class="doppel">
+                      <div class="form-group">
+                         <%= link_to new_game_path(:user_id => current_user.id, :mobject_id => 1) do %>
+                           <i class="btn btn-primary fa fa-plus"></i>
+                         <% end %>
+                        <%= f.label I18n.t :player3 %>
+                        <%= f.text_field :player3, class:"form-control"%>
+                      </div>
+                      <div class="form-group">
+                         <%= link_to new_game_path(:user_id => current_user.id, :mobject_id => 1) do %>
+                           <i class="btn btn-primary fa fa-plus"></i>
+                         <% end %>
+                        <%= f.label I18n.t :player4 %>
+                        <%= f.text_field :player4, class:"form-control"%>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                      <%= f.label I18n.t :modus %>
+                      <%= f.select :modus, options_for_select([["TieBreak", "TieBreak"],["Champions TieBreak", "Champions TieBreak"],["2 Spiele Differenz", "2 Spiele Differenz"]], @game.modus), {}, class:"form-control" %>
+                    </div>
+                    <br>
+
+
+                    <% end %>
+                    
+                    <table style="width:100%">
+                        <tr>
+                            <td colspan="2" style="text-align:center"><h1><%= "Neues Spiel am " + Date.today.strftime("%d.%m.%Y") %></h1></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center">
+                               <% home = "Gast" %>
+                               <% if @game.player2 %>
+                                   <% @u = User.where('email=?',@game.player2).first %>
+                                   <% if @u %>
+                                       <% home = @u.name + " " + @u.lastname %>
+                                   <% end %>
+                               <% end %>
+                               <h3><%= image_tag(@u.avatar, :size => "100x100") if @u and @u.avatar %><%= home %><%= f.text_field :player2, autofocus: true, style:"color:black" if !@u %>
+                               <%= link_to home_playersearch_path do %>
+                                 <i class="btn btn-primary fa fa-plus"></i>
+                               <% end %>
+                               </h3>
+                            </td>
+                            <td style="text-align:center float:left">
+                               <h3><%= image_tag(current_user.avatar, :size => "100x100") %><%= current_user.name + " " + current_user.lastname %>
+                               <%= link_to users_path do %>
+                                 <i class="btn btn-primary fa fa-plus"></i>
+                               <% end %>
+                               </h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center">
+                                Einzel
+                            </td>
+                            <td style="text-align:center">
+                                Tiebreak
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan = "2" style="text-align:center">
+                                <h1>Platz-Nr <%= f.text_field :mobject_id, style:"color:black" %></h1>                                
+                            </td>
+                        </tr>
+                        <tr>
+                             <%= f.hidden_field :player1, class:"form-control" %>
+                             <%= f.hidden_field :player2, class:"form-control" %>
+                             <%= f.hidden_field :user_id, class:"form-control" %>
+                             <%= f.hidden_field :mobject_id, class:"form-control" %>
+                             <%= f.hidden_field :mcategory_id, class:"form-control" %>
+                            <div class="actions">
+                            <td style="text-align:center">
+                              <%= f.submit "Speichern", class:"btn btn-primary btn-lg"%>
+                            </td>
+                            <td style="text-align:center">
+                              <%= link_to home_index3_path do %>
+                                <i class="btn btn-default btn-lg">Abbrechen</i>
+                              <% end %>
+                            </td>
+                            </div>
+
+                        </tr>
+                    </table>
+                    <br>
+
+                </div>
+            </div>
+        </div>
+    <% end %>
+
+<script>
+  function showdata() {
+    if ($("#game_mcategory_id").val() == 8) 
+    {
+      $(".doppel").hide();
+    } 
+    if ($("#game_mcategory_id").val() == 9) 
+    {
+      $(".doppel").show();
+    } 
+  }
+</script>

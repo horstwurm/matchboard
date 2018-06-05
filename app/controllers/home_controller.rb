@@ -1,6 +1,26 @@
 class HomeController < ApplicationController
 
-def nutzung
+def playersearch
+  @users = User.all
+    @controller_name = controller_name
+    if params[:page] != nil
+      session[:page] = params[:page]
+    end
+    @filter = params[:filter_id]
+    @users = User.search(params[:filter_id],params[:search]).order(created_at: :desc).page(params[:page]).per_page(10)
+    @usanz = @users.count
+    @locs = []
+    @wins = []
+    @users.each do |u|
+      if u.longitude and u.latitude and u.geo_address
+        @locs << [u.fullname, u.latitude, u.longitude]
+        @wins << ["<img src=" + u.avatar(:small) + "<br><h3>" + u.name + " " + u.lastname + "</h3><p>" + u.geo_address + "</p>"]
+      end
+    end
+    if @locs.length == 0
+        @locs << ["Adresse", 100, 100]
+        @wins << ["<h3> keine Geodaten vorhanden </h3>" ]
+    end
 end
 
 def index
@@ -708,6 +728,207 @@ def writeimage
 end
 
 def temptest
+  if params[:game_id]
+    @game = Game.find(params[:game_id])
+    @result = @game.results.last
+  end
 end
+
+def tenniscounter
+  home = "undefined"
+  guest = "undefined"
+  message = "undefined"
+
+  if params[:game_id] and params[:action_code]
+    @game = Game.find(params[:game_id])
+    #find last result
+    @mobject = Mobject.find(@game.mobject_id)
+    @result = @game.results.last
+    if !@result
+      @result = Result.new
+      message = "init game"
+      @result.game_id = params[:game_id]
+      @result.set1H = 0
+      @result.set1G = 0
+      @result.set2H = 0
+      @result.set2G = 0
+      @result.set3H = 0
+      @result.set3G = 0
+      @result.gameH = "00"
+      @result.gameG = "00"
+      @result.breakball = false
+      @result.setball = false
+      @result.matchball = false
+      @result.save
+    end
+
+    @newResult = Result.new
+    @newResult.game_id =  @result.game_id
+    @newResult.set1H = @result.set1H
+    @newResult.set1G = @result.set1G
+    @newResult.set2H = @result.set2H
+    @newResult.set2G = @result.set2G
+    @newResult.set3H = @result.set3H
+    @newResult.set3G = @result.set3G
+    @newResult.gameH = @result.gameH
+    @newResult.gameG = @result.gameG
+    @newResult.breakball = @result.breakball
+    @newResult.setball = @result.setball
+    @newResult.matchball = @result.matchball
+    
+    gameforH = false
+    gameforG = false
+    case params[:action_code]
+      when "G"
+        if @result.gameG == "00"
+          @newResult.gameG = "15"
+        end
+        if @result.gameG == "15"
+          @newResult.gameG = "30"
+        end
+        if @result.gameG == "30"
+          @newResult.gameG = "40"
+        end
+        if @result.gameG == "40" 
+          if (@result.gameH != "40" and @result.gameH != "AD")
+            gameforG = true
+          else
+            @newResult.gameG = "AD"
+            @newResult.gameH = "--"
+          end
+        end
+        if @result.gameG == "AD" 
+            gameforG = true
+        end
+        if @result.gameG == "--" 
+            @newResult.gameG = "DU"
+            @newResult.gameH = "DU"
+        end
+        if @result.gameG == "DU" 
+           @newResult.gameG = "AD"
+           @newResult.gameH = "--"
+        end
+        
+      when "H"
+        if @result.gameH == "00"
+          @newResult.gameH = "15"
+        end
+        if @result.gameH == "15"
+          @newResult.gameH = "30"
+        end
+        if @result.gameH == "30"
+          @newResult.gameH = "40"
+        end
+        if @result.gameH == "40"
+          if (@result.gameG != "40" and @result.gameG != "AD")
+            gameforH = true
+          else
+            @newResult.gameH = "AD"
+            @newResult.gameG = "--"
+          end
+        end
+        if @result.gameH == "AD" 
+            gameforH = true
+        end
+        if @result.gameH == "--" 
+            @newResult.gameG = "DU"
+            @newResult.gameH = "DU"
+        end
+        if @result.gameH == "DU" 
+           @newResult.gameH = "AD"
+           @newResult.gameG = "--"
+        end
+
+      when "R"
+    end
+    
+    set1closed = false
+    if ((@result.set1H - @result.set1G).abs >= 2) and (@result.set1H >= 6 or @result.set1G >= 6)
+      set1closed = true
+    end
+    set2closed = false
+    if ((@result.set2H - @result.set2G).abs >= 2) and (@result.set2H >= 6 or @result.set2G >= 6)
+      set2closed = true
+    end
+    set3closed = false
+    if ((@result.set3H - @result.set3G).abs >= 2) and (@result.set3H >= 6 or @result.set3G >= 6)
+      set3closed = true
+    end
+
+    if !set1closed
+      if gameforH
+        message = "new Game for H"
+        @newResult.set1H = @result.set1H + 1
+        @newResult.gameH = "00"
+        @newResult.gameG = "00"
+      end
+      if gameforG
+        message = "new Game for G"
+        @newResult.set1G = @result.set1G + 1
+        @newResult.gameH = "00"
+        @newResult.gameG = "00"
+      end
+    end
+
+    if set1closed and !set2closed
+      if gameforH
+        message = "new Game for H"
+        @newResult.set2H = @result.set2H + 1
+        @newResult.gameH = "00"
+        @newResult.gameG = "00"
+      end
+      if gameforG
+        message = "new Game for G"
+        @newResult.set2G = @result.set2G + 1
+        @newResult.gameH = "00"
+        @newResult.gameG = "00"
+      end
+    end
+
+    if set2closed and !set3closed
+      if gameforH
+        message = "new Game for H"
+        @newResult.set3H = @result.set3H + 1
+        @newResult.gameH = "00"
+        @newResult.gameG = "00"
+      end
+      if gameforG
+        message = "new Game for G"
+        @newResult.set3G = @result.set3G + 1
+        @newResult.gameH = "00"
+        @newResult.gameG = "00"
+      end
+    end
+    
+
+    @newResult.save
+    
+    @anz = Result.count
+    
+    home = @newResult.set1H.to_s + " " + @newResult.set2H.to_s + " " + @newResult.set3H.to_s + " " + @newResult.gameH
+    guest = @newResult.set1G.to_s + " " + @newResult.set2G.to_s + " " + @newResult.set3G.to_s + " " + @newResult.gameG
+
+  end
+  respond_to do |format|
+    format.json 
+      msg = {:anz => @anz, :HOME => home, :GUEST => guest, :message => message}
+      render :json => msg.to_json
+  end
+
+end
+
+def getResult
+  if params[:game_id]
+    @result = Game.find(params[:game_id]).results.last
+    msg = [{:s1H => @result.set1H, :s2H=> @result.set2H, :s3H=> @result.set3H, :gameH => @result.gameH, :s1G => @result.set1G, :s2G=> @result.set2G, :s3G=> @result.set3G, :gameG => @result.gameG}]
+  else
+    msg = [{:message => "game not found"}]
+  end
+  respond_to do |format|
+    format.json 
+      render :json => msg.to_json
+  end
+end
+
 
 end
